@@ -2,5 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.EmployeeMapper">
-
+    <!-- MyBatis的映射语句，用于执行员工信息的分页查询 -->
+    <select id="pageQuery" resultType="com.sky.entity.Employee">
+        <!-- 选择employee表中的所有字段 -->
+        select * from employee
+        <where>
+            <!-- 如果传入的查询参数name不为null且不为空，则添加模糊匹配name的条件 -->
+            <if test="name != null and name != ''">
+                and name like concat('%', #{name},'%')
+            </if>
+        </where>
+        <!-- 按创建时间降序排列结果 -->
+        order by create_time desc
+    </select>
 </mapper>
