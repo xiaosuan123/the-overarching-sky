@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * 用户实体类，用于存储和管理用户账户的相关信息。
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -17,26 +18,44 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 用户的唯一标识符ID。
+     */
     private Long id;
 
-    //微信用户唯一标识
+    /**
+     * 微信用户唯一标识，用于关联微信账户。
+     */
     private String openid;
 
-    //姓名
+    /**
+     * 用户的真实姓名。
+     */
     private String name;
 
-    //手机号
+    /**
+     * 用户的手机号码。
+     */
     private String phone;
 
-    //性别 0 女 1 男
+    /**
+     * 用户的性别，通常用"0"表示女性，"1"表示男性。
+     */
     private String sex;
 
-    //身份证号
+    /**
+     * 用户的身份证号码。
+     */
     private String idNumber;
 
-    //头像
+    /**
+     * 用户的头像链接。
+     */
     private String avatar;
 
-    //注册时间
+    /**
+     * 用户注册的时间。
+     */
     private LocalDateTime createTime;
+
 }
