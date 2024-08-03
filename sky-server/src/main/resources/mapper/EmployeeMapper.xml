@@ -9,7 +9,7 @@
         <where>
             <!-- 如果传入的查询参数name不为null且不为空，则添加模糊匹配name的条件 -->
             <if test="name != null and name != ''">
-                and name like concat('%', #{name},'%')
+                and name like concat('%',#{name},'%')
             </if>
         </where>
         <!-- 按创建时间降序排列结果 -->
