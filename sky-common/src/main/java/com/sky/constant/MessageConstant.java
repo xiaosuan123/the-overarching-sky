@@ -95,5 +95,8 @@ public class MessageConstant {
      * 订单不存在提示信息。
      */
     public static final String ORDER_NOT_FOUND = "订单不存在";
-
+    /**
+     * 用户已经存在
+     */
+    public static final String ALREADY_EXISTS = "已存在";
 }

@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
@@ -8,6 +9,7 @@ import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,4 +73,19 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     * 新增员工接口，用于处理员工的添加操作。
+     *
+     * @param employeeDTO 包含员工信息的数据传输对象。
+     * @return 操作结果，成功返回成功消息，失败返回错误信息。
+     */
+    @PostMapping
+    @ApiOperation("新增员工")
+    public Result save(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("新增员工：{}", employeeDTO);
+        // 调用员工服务层的保存方法，实现员工数据的持久化
+        employeeService.save(employeeDTO);
+        // 返回通用的成功结果
+        return Result.success();
+    }
 }
