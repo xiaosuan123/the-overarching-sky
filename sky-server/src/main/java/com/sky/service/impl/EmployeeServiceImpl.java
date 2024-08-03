@@ -52,6 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //密码比对
         // TODO 后期需要进行md5加密，然后再进行比对
+        password=DigestUtils.md5DigestAsHex(password.getBytes());
         if (!password.equals(employee.getPassword())) {
             //密码错误
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
@@ -72,12 +73,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         BeanUtils.copyProperties(employeeDTO,employee);
         employee.setStatus(StatusConstant.ENABLE);
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
-//        employee.setCreateTime(LocalDateTime.now());
-//        employee.setUpdateTime(LocalDateTime.now());
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.insert(employee);
-
     }
 
     /**
@@ -99,4 +95,50 @@ public class EmployeeServiceImpl implements EmployeeService {
         return new PageResult(total, records);
     }
 
+    /**
+     * 根据给定状态和员工ID启用或禁用员工账号。
+     *
+     * @param status 员工状态，通常为启用或禁用的标记值
+     * @param id 员工的唯一标识ID
+     */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        // 使用构建器模式创建员工对象，并设置状态和ID
+        Employee employee = Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
+        // 调用数据访问层更新员工状态
+        employeeMapper.update(employee);
+    }
+
+    /**
+     * 根据员工ID获取员工详细信息，密码字段将被隐藏。
+     *
+     * @param id 员工的唯一标识ID
+     * @return 员工对象，包含除密码外的所有信息
+     */
+    @Override
+    public Employee getById(Long id) {
+        // 从数据访问层获取员工对象
+        Employee employee = employeeMapper.getById(id);
+        // 为了安全，将密码设置为隐藏字符
+        employee.setPassword("****");
+        return employee;
+    }
+
+    /**
+     * 更新员工信息。
+     *
+     * @param employeeDTO 包含更新信息的数据传输对象
+     */
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        // 创建员工实体对象
+        Employee employee = new Employee();
+        // 使用 BeanUtils 工具类复制 DTO 对象的属性到员工实体对象
+        BeanUtils.copyProperties(employeeDTO, employee);
+        // 调用数据访问层更新员工信息
+        employeeMapper.update(employee);
+    }
 }

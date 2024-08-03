@@ -15,4 +15,32 @@
         <!-- 按创建时间降序排列结果 -->
         order by create_time desc
     </select>
+    <!-- 定义一个更新操作，id 为 "update"，parameterType 指定了传入参数的 Java 类型 -->
+    <update id="update" parameterType="Employee">
+
+        <!-- 构建 SQL 更新语句，目标表是 "employee" -->
+        update employee
+        <set>
+            <!-- 如果 name 属性不为 null，则在更新语句中添加 name 的更新 -->
+            <if test="name != null">name = #{name},</if>
+            <!-- 如果 username 属性不为 null，则在更新语句中添加 username 的更新 -->
+            <if test="username != null">username = #{username},</if>
+            <!-- 如果 password 属性不为 null，则在更新语句中添加 password 的更新 -->
+            <if test="password != null">password = #{password},</if>
+            <!-- 如果 phone 属性不为 null，则在更新语句中添加 phone 的更新 -->
+            <if test="phone != null">phone = #{phone},</if>
+            <!-- 如果 sex 属性不为 null，则在更新语句中添加 sex 的更新 -->
+            <if test="sex != null">sex = #{sex},</if>
+            <!-- 如果 idNumber 属性不为 null，则在更新语句中添加 id_Number 的更新 -->
+            <if test="idNumber != null">id_Number = #{idNumber},</if>
+            <!-- 如果 updateTime 属性不为 null，则在更新语句中添加 update_Time 的更新 -->
+            <if test="updateTime != null">update_Time = #{updateTime},</if>
+            <!-- 如果 updateUser 属性不为 null，则在更新语句中添加 update_User 的更新 -->
+            <if test="updateUser != null">update_User = #{updateUser},</if>
+            <!-- 如果 status 属性不为 null，则在更新语句中添加 status 的更新 -->
+            <if test="status != null">status = #{status},</if>
+        </set>
+        <!-- 更新条件是 id 必须等于传入参数中的 id 值 -->
+        where id = #{id}
+    </update>
 </mapper>
