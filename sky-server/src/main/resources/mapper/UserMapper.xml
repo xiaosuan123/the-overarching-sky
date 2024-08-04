@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> <!-- 指定了MyBatis的映射文件DTD，用于XML格式的验证 -->
+
+<!-- 根元素，定义了命名空间，应与UserMapper接口的完全限定名匹配 -->
+<mapper namespace="com.sky.mapper.UserMapper">
+
+    <!-- 定义了一个插入操作的SQL映射 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        <!-- SQL语句用于将新用户数据插入user表 -->
+        insert into user (
+        openid, name, phone, sex, id_number, avatar, create_time
+        )
+        values (
+        #{openid}, #{name}, #{phone}, #{sex}, #{idNumber}, #{avatar}, #{createTime}
+        )
+    </insert>
+
+</mapper>

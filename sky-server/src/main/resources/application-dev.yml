@@ -30,3 +30,8 @@ sky:
     port: 6379
     # 指定使用Redis的哪个数据库
     database: 10
+
+  # 微信应用配置信息
+  wechat:
+    appid: wx8396df8bfd20ddd4
+    secret: ea826f74d8ffcab6943d0a407bac9c64
