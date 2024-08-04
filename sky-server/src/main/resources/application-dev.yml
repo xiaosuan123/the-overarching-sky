@@ -22,3 +22,11 @@ sky:
     access-key-secret: bMJQwS4FOnr4WQVWbK444Zx3BJK44I
     # OSS 中存储桶（Bucket）的名称
     bucket-name: projectlearn-sky-take-out
+
+  redis:
+    # Redis 服务器的 IP 地址
+    host: localhost
+    # Redis 服务器的端口，默认为 6379
+    port: 6379
+    # 指定使用Redis的哪个数据库
+    database: 10
