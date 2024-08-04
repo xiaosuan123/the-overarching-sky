@@ -1,6 +1,7 @@
 package com.sky.aspect;
 
 import com.sky.annotation.AutoFill;
+import com.sky.constant.AutoFillConstant;
 import com.sky.context.BaseContext;
 import com.sky.enumeration.OperationType;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,6 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
-
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
@@ -65,26 +65,28 @@ public class AutoFillAspect {
         if (operationType == OperationType.INSERT) {
             // 插入操作，填充创建时间和创建用户
             try {
-                Method setCreateTime = entity.getClass().getDeclaredMethod("setCreateTime", LocalDateTime.class);
-                Method setCreateUser = entity.getClass().getDeclaredMethod("setCreateUser", Long.class);
-                Method setUpdateTime = entity.getClass().getDeclaredMethod("setUpdateTime", LocalDateTime.class);
-                Method setUpdateUser = entity.getClass().getDeclaredMethod("setUpdateUser", Long.class);
+                Method setCreateTime = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_CREATE_TIME, LocalDateTime.class);
+                Method setCreateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_CREATE_USER, Long.class);
+                Method setUpdateTime = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_TIME, LocalDateTime.class);
+                Method setUpdateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_USER, Long.class);
 
-                setCreateTime.invoke(entity, now);
-                setCreateUser.invoke(entity, currentId);
-                setUpdateTime.invoke(entity, now);
-                setUpdateUser.invoke(entity, currentId);
+                //通过反射为对象属性赋值
+                setCreateTime.invoke(entity,now);
+                setCreateUser.invoke(entity,currentId);
+                setUpdateTime.invoke(entity,now);
+                setUpdateUser.invoke(entity,currentId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (operationType == OperationType.UPDATE) {
             // 更新操作，只填充更新时间和更新用户
             try {
-                Method setUpdateTime = entity.getClass().getDeclaredMethod("setUpdateTime", LocalDateTime.class);
-                Method setUpdateUser = entity.getClass().getDeclaredMethod("setUpdateUser", Long.class);
+                Method setUpdateTime = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_TIME, LocalDateTime.class);
+                Method setUpdateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_USER, Long.class);
 
-                setUpdateTime.invoke(entity, now);
-                setUpdateUser.invoke(entity, currentId);
+                //通过反射为对象属性赋值
+                setUpdateTime.invoke(entity,now);
+                setUpdateUser.invoke(entity,currentId);
             } catch (Exception e) {
                 e.printStackTrace();
             }

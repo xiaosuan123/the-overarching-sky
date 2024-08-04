@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.SetmealMapper">
+    <!-- 定义了一个结果映射resultMap，用于将查询结果映射到Java对象的属性上 -->
+    <resultMap id="setmealAndDishMap" type="com.sky.vo.SetmealVO" autoMapping="true">
+        <!-- 映射结果集中的列到SetmealVO对象的id属性 -->
+        <result column="id" property="id"/>
+        <!-- 定义了SetmealVO对象中setmealDishes属性（一个集合）的映射规则 -->
+        <collection property="setmealDishes" ofType="SetmealDish">
+            <!-- 对应SetmealDish对象的id属性 -->
+            <result column="sd_id" property="id"/>
+            <!-- 对应SetmealDish对象的setmealId属性 -->
+            <result column="setmeal_id" property="setmealId"/>
+            <!-- 对应SetmealDish对象的dishId属性 -->
+            <result column="dish_id" property="dishId"/>
+            <!-- 对应SetmealDish对象的name属性 -->
+            <result column="sd_name" property="name"/>
+            <!-- 对应SetmealDish对象的price属性 -->
+            <result column="sd_price" property="price"/>
+            <!-- 对应SetmealDish对象的copies属性 -->
+            <result column="copies" property="copies"/>
+        </collection>
+    </resultMap>
+    <!-- 定义了更新setmeal表记录的SQL语句 -->
+    <update id="update" parameterType="Setmeal">
+        update setmeal
+        <!-- 使用if标签判断Setmeal对象的属性是否不为null，如果不为空则在动态生成的SQL语句中包含该字段 -->
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="image != null">
+                image = #{image},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!-- 定义了向setmeal表插入新记录的SQL语句 -->
+    <insert id="insert" parameterType="Setmeal" useGeneratedKeys="true" keyProperty="id">
+        insert into setmeal
+        <!-- 使用#{}占位符插入Setmeal对象的属性值 -->
+        (category_id, name, price, status, description, image, create_time, update_time, create_user, update_user)
+        values (#{categoryId}, #{name}, #{price}, #{status}, #{description}, #{image}, #{createTime}, #{updateTime},
+                #{createUser}, #{updateUser})
+    </insert>
+    <!-- 定义了分页查询套餐及其分类名称的SQL语句，查询结果将映射到SetmealVO对象 -->
+    <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
+        select
+        s.*,c.name categoryName
+        from
+        setmeal s
+        left join
+        category c
+        on
+        s.category_id = c.id
+        <!-- 使用where标签和if标签实现条件查询，dynamic SQL以适应不同的查询条件 -->
+        <where>
+            <if test="name != null">
+                and s.name like concat('%',#{name},'%')
+            </if>
+            <if test="status != null">
+                and s.status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and s.category_id = #{categoryId}
+            </if>
+        </where>
+        order by s.create_time desc
+    </select>
+    <!-- 定义了根据套餐ID查询套餐及其包含的菜品信息的SQL语句，查询结果将使用之前定义的resultMap进行映射 -->
+    <select id="getByIdWithDish" parameterType="long" resultMap="setmealAndDishMap">
+        select a.*,
+               b.id    sd_id,
+               b.setmeal_id,
+               b.dish_id,
+               b.name  sd_name,
+               b.price sd_price,
+               b.copies
+        from setmeal a
+                 left join
+             setmeal_dish b
+             on
+                 a.id = b.setmeal_id
+        where a.id = #{id}
+    </select>
+    <!-- 定义了列出所有套餐信息的SQL语句，查询结果将映射到Setmeal对象 -->
+    <select id="list" parameterType="Setmeal" resultType="Setmeal">
+        select * from setmeal
+        <where>
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+    <!-- 定义了根据条件统计套餐数量的SQL语句 -->
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from setmeal
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+        </where>
+    </select>
+</mapper>

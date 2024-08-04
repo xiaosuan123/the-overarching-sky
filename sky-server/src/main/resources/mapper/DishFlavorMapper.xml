@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 定义了映射文件的命名空间，对应Mapper接口的完全限定名 -->
+<mapper namespace="com.sky.mapper.DishFlavorMapper">
+
+    <!-- 批量插入菜品风味信息 -->
+    <insert id="insertBatch">
+        <!-- 基础SQL语句，指定了要插入的表和列 -->
+        insert into dish_flavor (dish_id, name, value) VALUES
+        <!-- 使用foreach标签遍历flavors集合 -->
+        <!-- separator属性定义了各个值之间的分隔符 -->
+        <foreach collection="flavors" item="df" separator=",">
+            <!-- 对于集合中的每个元素，使用#{df.dishId}, #{df.name}, #{df.value}来插入具体的值 -->
+            (#{df.dishId},#{df.name},#{df.value})
+        </foreach>
+    </insert>
+
+</mapper>
