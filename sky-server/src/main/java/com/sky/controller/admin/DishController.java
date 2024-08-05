@@ -11,7 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,6 @@ import java.util.Set;
 public class DishController {
     @Autowired
     private DishService dishService;
-    @Qualifier("redisTemplate")
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -147,7 +146,7 @@ public class DishController {
      */
     @GetMapping("/list")
     @ApiOperation("根据分类id查询菜品")
-    public Result<List<Dish>> list(@RequestParam(required = false) Long categoryId) {
+    public Result<List<Dish>> list( Long categoryId) {
         // 调用服务层方法，根据分类ID获取菜品列表
         List<Dish> list = dishService.list(categoryId);
         // 返回包含菜品列表的操作结果
