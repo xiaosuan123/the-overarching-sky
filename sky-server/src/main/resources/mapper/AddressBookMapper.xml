@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sky.mapper.AddressBookMapper">
+    <!-- 更新地址簿信息 -->
+    <update id="update" parameterType="addressBook">
+        update address_book
+        <set>
+            <!-- 如果consignee属性不为空，则更新收货人 -->
+            <if test="consignee != null">
+                consignee = #{consignee},
+            </if>
+            <!-- 如果sex属性不为空，则更新性别 -->
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <!-- 如果phone属性不为空，则更新联系电话 -->
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <!-- 如果detail属性不为空，则更新详细地址 -->
+            <if test="detail != null">
+                detail = #{detail},
+            </if>
+            <!-- 如果label属性不为空，则更新地址标签 -->
+            <if test="label != null">
+                label = #{label},
+            </if>
+            <!-- 如果isDefault属性不为空，则更新是否默认地址 -->
+            <if test="isDefault != null">
+                is_default = #{isDefault},
+            </if>
+        </set>
+        <!-- 更新条件：根据id -->
+        where id = #{id}
+    </update>
+
+    <!-- 根据条件查询地址簿列表 -->
+    <select id="list" resultType="com.sky.entity.AddressBook" parameterType="AddressBook">
+        select * from address_book
+        <where>
+            <!-- 如果userId属性不为空，则按用户ID筛选 -->
+            <if test="userId != null">
+                user_id = #{userId}
+            </if>
+            <!-- 如果phone属性不为空，则按联系电话筛选 -->
+            <if test="phone != null">
+                and phone = #{phone}
+            </if>
+            <!-- 如果isDefault属性不为空，则按是否默认地址筛选 -->
+            <if test="isDefault != null">
+                and is_default = #{isDefault}
+            </if>
+        </where>
+    </select>
+</mapper>
