@@ -33,7 +33,9 @@ import java.util.List;
 public class SetmealServiceImpl implements SetmealService {
     @Autowired
     private SetmealMapper setmealMapper;
+    @Autowired
     private SetmealDishMapper setmealDishMapper;
+    @Autowired
     private DishMapper dishMapper;
 
 
