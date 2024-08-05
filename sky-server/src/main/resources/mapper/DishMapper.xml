@@ -6,10 +6,10 @@
 
     <!-- 插入新菜品记录，并获取自动生成的主键ID -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        insert into dish (name, category_id, price, image, description, create_time, update_time, create_user,
-                          update_user, status)
-        values (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{createTime}, #{updateTime}, #{createUser},
-                #{updateUser}, #{status})
+        insert into dish (name, category_id, price, image, description, create_time, update_time,
+                          create_user, update_user, status)
+        values (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{createTime}, #{updateTime},
+                #{createUser}, #{updateUser}, #{status})
     </insert>
 
     <!-- 更新菜品记录，仅更新传入参数中非空的字段 -->
@@ -23,14 +23,17 @@
             <if test="description != null">description = #{description},</if>
             <if test="status != null">status = #{status},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="updateUser != null">update_user = #{updateUser}</if>
+            <!-- 去除最后一个逗号 -->
         </set>
         where id = #{id}
     </update>
 
     <!-- 分页查询菜品，支持名称、分类ID和状态的条件搜索，并与分类表进行左连接 -->
     <select id="pageQuery" resultType="com.sky.vo.DishVO">
-        select d.* , c.name as categoryName from dish d left outer join category c on d.category_id = c.id
+        select d.* , c.name as categoryName
+        from dish d
+        left outer join category c on d.category_id = c.id
         <where>
             <if test="name != null">
                 and d.name like concat('%',#{name},'%')

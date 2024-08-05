@@ -22,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,9 +33,7 @@ import java.util.List;
 public class SetmealServiceImpl implements SetmealService {
     @Autowired
     private SetmealMapper setmealMapper;
-    @Autowired
     private SetmealDishMapper setmealDishMapper;
-    @Autowired
     private DishMapper dishMapper;
 
 
@@ -49,7 +46,6 @@ public class SetmealServiceImpl implements SetmealService {
      *
      * @param setmealDTO 套餐数据传输对象，包含套餐信息和关联的菜品项。
      */
-    @Transactional
     @Override
     public void saveWithDish(SetmealDTO setmealDTO) {
         Setmeal setmeal = new Setmeal();
@@ -102,7 +98,6 @@ public class SetmealServiceImpl implements SetmealService {
      * @param ids 要删除的套餐ID列表。
      * @throws DeletionNotAllowedException 如果尝试删除正在销售的套餐，则抛出此异常。
      */
-    @Transactional
     @Override
     public void deleteBatch(List<Long> ids) {
         // 检查套餐状态，如果正在销售，则不允许删除
@@ -145,7 +140,6 @@ public class SetmealServiceImpl implements SetmealService {
      * @param setmealDTO 包含更新信息的套餐数据传输对象。
      */
     @Override
-    @Transactional
     public void update(SetmealDTO setmealDTO) {
         Setmeal setmeal = new Setmeal();
         // 复制属性到新的套餐对象
