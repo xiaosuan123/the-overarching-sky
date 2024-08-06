@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 定义OrderDetailMapper的命名空间，与Java接口的完全限定名一致 -->
+<mapper namespace="com.sky.mapper.OrderDetailMapper">
+
+    <!-- 批量插入订单详情记录 -->
+    <select id="insertBatch">
+        <!-- SQL语句，用于批量插入order_detail表 -->
+        insert into order_detail (
+        name, image, order_id, dish_id, setmeal_id, dish_flavor, number, amount
+        )
+        values
+        <!-- 使用foreach迭代orderDetailList集合，每个元素表示一个订单详情 -->
+        <foreach collection="orderDetailList" item="od" separator=",">
+            <!-- 对于集合中的每个订单详情，生成一个插入值的列表 -->
+            (#{od.name}, #{od.image}, #{od.orderId}, #{od.dishId}, #{od.setmealId}, #{od.dishFlavor}, #{od.number}, #{od.amount})
+        </foreach>
+    </select>
+</mapper>
