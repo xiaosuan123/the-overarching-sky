@@ -71,7 +71,7 @@ public class OrderController {
      * @param status 订单状态
      * @return 包含分页结果的 {@link Result} 对象
      */
-    @PutMapping("/historyOrders")
+    @GetMapping("/historyOrders")
     @ApiOperation("历史订单查询")
     public Result<PageResult> page(int page, int pageSize, Integer status){
         PageResult pageResult = orderService.pageQuery4User(page, pageSize, status);
