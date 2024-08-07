@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.OrderMapper">
 
-    <!-- 插入新的订单记录，使用数据库自增ID -->
     <insert id="insert" parameterType="Orders" useGeneratedKeys="true" keyProperty="id">
-        insert into orders(number, status, user_id, address_book_id, order_time, checkout_time, pay_method, pay_status, amount, remark, phone, address, user_name, consignee, cancel_reason, rejection_reason, cancel_time, estimated_delivery_time, delivery_status, delivery_time, pack_amount, tableware_number, tableware_status)
-        VALUES
+        insert into orders (number, status, user_id, address_book_id, order_time, checkout_time, pay_method, pay_status,
+                            amount, remark, phone, address, consignee, estimated_delivery_time, delivery_status,
+                            pack_amount, tableware_number, tableware_status)
+        values
             (#{number}, #{status}, #{userId}, #{addressBookId}, #{orderTime}, #{checkoutTime}, #{payMethod},
              #{payStatus},#{amount}, #{remark}, #{phone}, #{address}, #{consignee}, #{estimatedDeliveryTime},
              #{deliveryStatus},#{packAmount}, #{tablewareNumber}, #{tablewareStatus})
     </insert>
-    <!-- 更新订单记录，使用动态SQL条件 -->
+
     <update id="update" parameterType="com.sky.entity.Orders">
         update orders
         <set>
@@ -43,7 +43,7 @@
         </set>
         where id = #{id}
     </update>
-    <!-- 分页查询订单，使用动态SQL条件和结果映射 -->
+
     <select id="pageQuery" resultType="Orders">
         select * from orders
         <where>
@@ -68,7 +68,7 @@
         </where>
         order by order_time desc
     </select>
-    <!-- 根据条件统计订单总金额 -->
+
     <select id="sumByMap" resultType="java.lang.Double">
         select sum(amount) from orders
         <where>
@@ -83,24 +83,21 @@
             </if>
         </where>
     </select>
-    <!-- 根据条件统计订单数量 -->
     <select id="countByMap" resultType="java.lang.Integer">
         select count(id) from orders
         <where>
-        <if test="begin != null">
-            and order_time &gt; #{begin}
-        </if>
-        <if test="end != null">
-            and order_time &lt; #{end}
-        </if>
-        <if test="status != null">
-            and status = #{status}
-        </if>
+            <if test="begin != null">
+                and order_time &gt; #{begin}
+            </if>
+            <if test="end != null">
+                and order_time &lt; #{end}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
         </where>
     </select>
-    <!-- 获取销售排行前十的商品信息 -->
     <select id="getSalesTop10" resultType="com.sky.dto.GoodsSalesDTO">
-        <!-- SQL语句，查询销售排行前十的商品 -->
         select od.name, sum(od.number) number
         from order_detail od,orders o
         where od.order_id = o.id and o.status = 5
@@ -110,14 +107,8 @@
         <if test="end != null">
             and o.order_time &lt; #{end}
         </if>
-        <!-- 分组和排序 -->
         group by od.name
         order by number desc
-        <!-- 限制结果数量为前十 -->
         limit 0,10
-
-    </select>
-    <select id="getByNumber" resultType="com.sky.entity.Orders">
-        select * from orders where number = #{orderNumber}
     </select>
 </mapper>
